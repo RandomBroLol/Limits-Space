@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Limits Amazing Website</title>
+  <!-- Add Google Fonts for the blocky font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    /* Reset and base styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      background-color: #000000;
+      color: #ffffff;
+      overflow: hidden;
+      min-height: 100vh;
+    }
+
+    /* Canvas styles */
+    #space-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    /* Content styles */
+    .content {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    /* Warning box */
+    .warning-box {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(0, 255, 0, 0.2);
+      color: #00ff00;
+      border: 2px solid #00ff00;
+      border-radius: 12px;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 100;
+      box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+      animation: pulse 2s infinite;
+      max-width: 400px;
+      width: calc(100% - 40px);
+    }
+
+    .warning-icon {
+      width: 24px;
+      height: 24px;
+      min-width: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .warning-content {
+      flex-grow: 1;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .warning-content a {
+      color: #00ff00;
+      text-decoration: underline;
+      margin-left: 5px;
+      transition: all 0.2s;
+    }
+
+    .warning-content a:hover {
+      color: #ffffff;
+      text-shadow: 0 0 8px rgba(0, 255, 0, 0.8);
+    }
+
+    .close-button {
+      width: 20px;
+      height: 20px;
+      background: transparent;
+      border: none;
+      color: #00ff00;
+      font-size: 20px;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      opacity: 0.8;
+      transition: opacity 0.2s;
+    }
+
+    .close-button:hover {
+      opacity: 1;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 15px rgba(0, 255, 0, 0.5); }
+      50% { box-shadow: 0 0 25px rgba(0, 255, 0, 0.8); }
+      100% { box-shadow: 0 0 15px rgba(0, 255, 0, 0.5); }
+    }
+
+    /* Morph up animations */
+    .morph-up {
+      opacity: 0;
+      transform: translateY(50px);
+      animation: morphUp 1s forwards;
+    }
+
+    .delay-1 {
+      animation-delay: 0.3s;
+    }
+
+    .delay-2 {
+      animation-delay: 0.6s;
+    }
+
+    .delay-3 {
+      animation-delay: 0.9s;
+    }
+
+    @keyframes morphUp {
+      from {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Typing animation styles */
+    .typing-text {
+      font-size: 3rem;
+      font-weight: bold;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.025em;
+      min-height: 4rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    .typing-text::after {
+      content: '|';
+      position: absolute;
+      right: -10px;
+      animation: blink 0.7s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .blocky-font {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 2.5rem;
+      letter-spacing: 0;
+      color: #00ff00;
+      text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    }
+
+    p {
+      max-width: 32rem;
+      margin: 0 auto 2rem;
+      font-size: 1.125rem;
+      color: #d1d5db;
+      line-height: 1.6;
+      transition: all 0.3s ease;
+    }
+
+    p:hover {
+      color: #ffffff;
+      text-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+      transform: scale(1.02);
+    }
+
+    .journey-button {
+      background-color: #ffffff;
+      color: #000000;
+      border: none;
+      border-radius: 9999px;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .journey-button:hover {
+      background-color: rgba(255, 255, 255, 0.9);
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    }
+
+    .journey-button::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 5px;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.8);
+      opacity: 0;
+      border-radius: 100%;
+      transform: scale(1, 1) translate(-50%);
+      transform-origin: 50% 50%;
+    }
+
+    .journey-button:hover::after {
+      animation: ripple 1s ease-out;
+    }
+
+    @keyframes ripple {
+      0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+      }
+      100% {
+        transform: scale(20, 20);
+        opacity: 0;
+      }
+    }
+
+    /* Responsive styles */
+    @media (min-width: 640px) {
+      .typing-text {
+        font-size: 4rem;
+      }
+      
+      .blocky-font {
+        font-size: 3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="warning-box" id="warning-box">
+    <div class="warning-icon">
+      <!-- Warning Icon SVG -->
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+        <line x1="12" y1="9" x2="12" y2="13"></line>
+        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+      </svg>
+    </div>
+    <div class="warning-content">This is now a idk for website we moved but you can still explore here <a href="https://limitsamazingwebsite.vercel.app/" target="_blank">click to go to the website!</a></div>
+    <button class="close-button" id="close-warning">×</button>
+  </div>
+  
+  <canvas id="space-canvas"></canvas>
+  
+  <div class="content">
+    <h1 id="typing-text" class="typing-text morph-up delay-1"></h1>
+    <p class="morph-up delay-2">Random website fr.</p>
+    <a href="limit.html" class="journey-button morph-up delay-3">Go to the sigma space</a>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Close warning box functionality
+      document.getElementById('close-warning').addEventListener('click', function() {
+        document.getElementById('warning-box').style.display = 'none';
+      });
+      
+      // Typing animation
+      const typingText = document.getElementById('typing-text');
+      const text = "Limits Mini Spacee";
+      let isDeleting = false;
+      let isBlocky = false;
+      let charIndex = 0;
+      let typingSpeed = 100; // milliseconds
+      let currentPhase = "typing"; // phases: typing, waiting, deleting, changing
+      
+      function typeText() {
+        // Get the current text to display
+        const currentText = text.substring(0, charIndex);
+        
+        // Update the text and styling
+        typingText.innerHTML = currentText;
+        if (isBlocky) {
+          typingText.classList.add('blocky-font');
+        } else {
+          typingText.classList.remove('blocky-font');
+        }
+        
+        // Handle the different phases of the animation
+        switch(currentPhase) {
+          case "typing":
+            charIndex++;
+            if (charIndex === text.length) {
+              currentPhase = "waiting";
+              typingSpeed = 1500; // Wait before deleting
+            } else {
+              typingSpeed = 100; // Normal typing speed
+            }
+            break;
+            
+          case "waiting":
+            currentPhase = "deleting";
+            typingSpeed = 50; // Faster when deleting
+            break;
+            
+          case "deleting":
+            charIndex--;
+            if (charIndex === 0) {
+              currentPhase = "changing";
+              typingSpeed = 500; // Pause before typing again
+            } else {
+              typingSpeed = 50; // Deletion speed
+            }
+            break;
+            
+          case "changing":
+            isBlocky = !isBlocky; // Toggle font style
+            currentPhase = "typing";
+            typingSpeed = 100; // Back to typing speed
+            break;
+        }
+        
+        setTimeout(typeText, typingSpeed);
+      }
+      
+      // Start the typing animation
+      setTimeout(typeText, 1000); // Start after initial animation
+      
+      const canvas = document.getElementById('space-canvas');
+      const ctx = canvas.getContext('2d');
+      
+      // Set canvas to full screen
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+      
+      // Star properties
+      const stars = [];
+      
+      function createStars() {
+        const starCount = Math.floor((canvas.width * canvas.height) / 1000);
+        
+        // Create stars
+        for (let i = 0; i < starCount; i++) {
+          stars.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            radius: Math.random() * 1.5,
+            vx: Math.random() * 0.2 - 0.1,
+            vy: Math.random() * 0.2 - 0.1,
+            alpha: Math.random(),
+            alphaChange: Math.random() * 0.01
+          });
+        }
+      }
+      
+      createStars();
+      
+      // Animation
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Background gradient
+        const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+        gradient.addColorStop(0, '#0a0a1a');
+        gradient.addColorStop(1, '#000000');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw and update stars
+        stars.forEach(star => {
+          // Update position
+          star.x += star.vx;
+          star.y += star.vy;
+          
+          // Update alpha (twinkling effect)
+          star.alpha += star.alphaChange;
+          if (star.alpha > 1 || star.alpha < 0) {
+            star.alphaChange = -star.alphaChange;
+          }
+          
+          // Wrap around edges
+          if (star.x < 0) star.x = canvas.width;
+          if (star.x > canvas.width) star.x = 0;
+          if (star.y < 0) star.y = canvas.height;
+          if (star.y > canvas.height) star.y = 0;
+          
+          // Draw star
+          ctx.beginPath();
+          ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
+          ctx.fill();
+        });
+        
+        requestAnimationFrame(animate);
+      }
+      
+      animate();
+      
+      // Add some distant nebula-like clouds
+      const cloudCount = 5;
+      const clouds = [];
+      
+      function createClouds() {
+        for (let i = 0; i < cloudCount; i++) {
+          clouds.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            size: 200 + Math.random() * 200,
+            opacity: Math.random() * 0.3,
+            speed: 0.1 + Math.random() * 0.2,
+            hue: Math.random() * 60 // Add some color variation
+          });
+        }
+      }
+      
+      // This would normally load a cloud texture, but for simplicity we'll draw them
+      function drawClouds() {
+        clouds.forEach(cloud => {
+          // Simple radial gradient for cloud effect with some color variation
+          const gradient = ctx.createRadialGradient(
+            cloud.x, cloud.y, 0,
+            cloud.x, cloud.y, cloud.size / 2
+          );
+          
+          gradient.addColorStop(0, `hsla(${260 + cloud.hue}, 70%, 30%, ${cloud.opacity})`);
+          gradient.addColorStop(1, 'hsla(260, 70%, 30%, 0)');
+          
+          ctx.fillStyle = gradient;
+          ctx.beginPath();
+          ctx.arc(cloud.x, cloud.y, cloud.size / 2, 0, Math.PI * 2);
+          ctx.fill();
+          
+          // Move clouds
+          cloud.x -= cloud.speed;
+          
+          // Reset position when off screen
+          if (cloud.x + cloud.size < 0) {
+            cloud.x = canvas.width;
+            cloud.y = Math.random() * canvas.height;
+          }
+        });
+      }
+      
+      createClouds();
+      
+      // Enhance the animate function to include clouds
+      function enhancedAnimate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Background gradient
+        const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+        gradient.addColorStop(0, '#0a0a1a');
+        gradient.addColorStop(1, '#000000');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw clouds (behind stars)
+        drawClouds();
+        
+        // Draw and update stars
+        stars.forEach(star => {
+          // Update position
+          star.x += star.vx;
+          star.y += star.vy;
+          
+          // Update alpha (twinkling effect)
+          star.alpha += star.alphaChange;
+          if (star.alpha > 1 || star.alpha < 0) {
+            star.alphaChange = -star.alphaChange;
+          }
+          
+          // Wrap around edges
+          if (star.x < 0) star.x = canvas.width;
+          if (star.x > canvas.width) star.x = 0;
+          if (star.y < 0) star.y = canvas.height;
+          if (star.y > canvas.height) star.y = 0;
+          
+          // Draw star
+          ctx.beginPath();
+          ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
+          ctx.fill();
+        });
+        
+        requestAnimationFrame(enhancedAnimate);
+      }
+      
+      // Interactive effects for mouse movement
+      let mouseX = 0;
+      let mouseY = 0;
+      
+      document.addEventListener('mousemove', function(e) {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        
+        // Subtle star movement based on mouse position
+        stars.forEach(star => {
+          // Calculate distance from mouse
+          const dx = mouseX - star.x;
+          const dy = mouseY - star.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          
+          // Only affect stars within a certain radius
+          if (distance < 100) {
+            // Move stars slightly away from cursor
+            const angle = Math.atan2(dy, dx);
+            const repelForce = 0.1 * (1 - distance / 100);
+            star.vx -= Math.cos(angle) * repelForce;
+            star.vy -= Math.sin(angle) * repelForce;
+            
+            // Limit velocity
+            const maxVel = 0.5;
+            star.vx = Math.max(Math.min(star.vx, maxVel), -maxVel);
+            star.vy = Math.max(Math.min(star.vy, maxVel), -maxVel);
+          }
+        });
+      });
+      
+      // Start the enhanced animation
+      enhancedAnimate();
+    });
+  </script>
+</body>
+</html>
